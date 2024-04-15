@@ -1,0 +1,64 @@
+ A thread-pool exercise in C
+
+ # The exercise is to amend the multithreading_server by adding a thread pool:
+   ## Threads are created at startup, and put into a pool. Here is the library function for waiting:
+    
+           int pthread_cond_wait(pthread_cond_t *cond,     /** the wait condition **/
+                                 pthread_mutex_t *mutex);  /** help mutex to be released **/
+
+       A waiting pthread then can be awoken by sending a signal associated with the
+       condition in question. Assuming that the thread in question has called
+       pthread_cond_wait with the condition 
+
+           pthread_cond_t sample_condition  = PTHREAD_COND_INITIALIZER;
+
+       this call would send the signal:
+
+           pthread_cond_signal(&sample_condition);
+
+   ## If you've time, you may want to implement the pool yourself; otherwise, search the web for
+      a thread pool implementation (there are several good ones), and give it a try.
+
+ A synchronization with cooperation exercise in Java
+
+ # Consider a character array with, say, five elements:
+
+        +-----+-----+-----+-----+-----+
+	| 'A' | 'B' | 'C' | 'D' | 'E' |     ## elements
+	+-----+-----+-----+-----+-----+
+	  [0]   [1]   [2]   [3]   [4]       ## indexes
+
+ # There are five started threads--one thread per array element:
+
+    MyThread[ ] threads = new MyThread[5];            ## array of 5 MyThread elements
+	...                                           ## construct each MyThread in the array
+	for (i = 4; i >= 0; i--) threads[i].start();  ## start each thread in reverse order
+
+ # Each MyThread instance has an ID and a character to write:
+
+   class MyThread {
+      static char[] array = new char[5]; ## the shared resource
+      static int turn = 0                ## whose turn it is to write
+      private int id;                    ## an integer value, one of 0, 1, 2, 3, or 4
+      private character c;               ## one of 'A', 'B',...,'E': id 0 writes 'A', id 1 writes 'B', and so on
+	  
+      @Override
+      public void run() {
+         while (true) writeChar();   ## each MyThread infinitely writes its char into the array
+      }
+   }
+
+ # The writeChar() method should be implemented to satisfy the following conditions:
+   ## Only one MyThread at a time can write into the shared resource, the char array.
+   
+   ## The MyThread instances should write in turn: first the MyThread that writes an 'A',
+      then the MyThread that writes a 'B', and so on.
+
+   ## After the 'E' has been written, the array should be printed out for confirmation,
+      the turn should be reset to zero, and the writing process should begin anew.
+
+   ## If a MyThread grabs the lock out of turn, this MyThread should wait().
+
+   ## Once a MyThread has done its writing and whatever other logic belongs to the critical
+      section, the MyThread should notifyAll() other waiting threads.
+	  

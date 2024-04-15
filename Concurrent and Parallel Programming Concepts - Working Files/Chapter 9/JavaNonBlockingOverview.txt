@@ -1,0 +1,45 @@
+ Overview of the Java example in non-blocking I/O using network sockets
+
+ # Big picture:
+ 
+                    HTTP requests
+  NonBlockingClient---------------->NonBlockingServer   # client initiates the conversation
+  
+                     HTTP responses
+  NonBlockingClient<----------------NonBlockingServer   # server echoes request as the response
+
+   ## A client request process is a 2-step: (1) connect to server, then (2) send a request
+
+   ## Relevant data types in java.nio.channels
+
+ # Two programs in a client/server architecture: NonBlockingServer.java and NonBlockingClient.java
+
+   ## The programs are executed separately; the server should be started first.
+   
+   ## The non-blocking channels used by the server and the client serve as an IPC mechanism.
+
+ # Server overview
+ 
+   ## The server opens a non-blocking ServerSocketChannel, which awaits client connections.
+   
+   ## Per client connection, a non-blocking read/write channel is used for the request/response exchange.
+   
+   ## Two if-constructs inside a 'while(true)' loop determines whether a client is trying to
+      connect or trying to send a request.
+
+   ## A java.nio.channels.Selector object is used to monitor client connections/requests:
+      the select() method returns a list of connections/requests.
+
+      ### The select() method is the only blocking call used in the server.
+
+ # Client overview
+
+   ## Client initiates the conversation by opening a non-blocking read/write channel to the server.
+
+      ### The connection method itself occurs in a loop, as it does not block.
+
+      ### The client prompts for strings, which provide the request data echoed back by the server.
+
+ # The example illustrates again the challenges inherent in a non-blocking API.
+ 
+ 

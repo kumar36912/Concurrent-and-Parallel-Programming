@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Blocking I/O</title>
+    <script>
+      localStorage.name = 'Flintstone';             <!-- line 1 -->
+      alert('Before blocking call');                <!-- line 2 -->
+      var value = localStorage.getItem('name');     <!-- line 3 -->
+      alert('After blocking call: ' + value);       <!-- line 4 -->
+    </script>
+  </head>
+  <body/>
+</html>

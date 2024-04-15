@@ -1,0 +1,36 @@
+ Cooperation -- the flip side of locking in thread synchronization
+
+ # Java's synchronized block implements a 'monitor', a programming mechanism that supports
+   mutual exclusion for thread coordination, but also supports thread cooperation.
+   ## In Java, some of the cooperative mechanisms (e.g., one thread explicitly yielding others)
+      have been deprecated.
+
+ # Depiction of a queue with multiple 'producers' and 'consumers':
+
+                    back                   front
+                      \                     /
+            insert   +---+---+---+---+---+---+  remove
+   producer--------->| 6 | 8 | 4 | 9 | 3 | 7 |---------->consumer
+   ...		     +---+---+---+---+---+---+           ...      ## any number of producers/consumers
+		       A queue of six items
+
+   ## Consider the classic example of two threads that manipulate a shared data structure:
+      one thread ('producer') inserts items into the shared structure (for example, a queue),
+      whereas another thread ('consumer') removes items from this structure.
+
+      ### If the queue is empty, a consumer should wait until a producer inserts an item.
+          #### A producer thread awakens waiting consuming threads after the insertion of an item.
+
+      ### If the queue is full, a producer should wait until a consumer removes an item, thereby freeing up room.
+	  #### A consumer thread awakens waiting producing threads after the removal of an item.
+
+ # For simplicity, a stack instead of a queue:
+
+                +---+
+		| 7 |<-------top    ## insertions and removals occur here
+		+---+
+		| 3 |
+		+---+
+		| 9 |
+		+---+
+		 ...

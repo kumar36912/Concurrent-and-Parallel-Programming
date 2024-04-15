@@ -1,0 +1,40 @@
+ Options for thread synchronization (including cooperation)
+
+ # The basic mutex approach:
+
+   ## Storage location N is accessible across many threads:
+
+                              +-----+   |
+	 thread1---->lock---->|  7  |   |<----other threads have no access
+                              +-----+   |
+                                 N          ## N is shared across threads
+
+    ## The locking ensures mutual exclusion for thread access to critical-section code.
+
+    ## C (pthread_mutex_t data type) and Java (synchronized block) illustrate this approach.
+
+       ### Java has various data types (e.g., Atomic Integer) with the synchronization baked in
+	   
+       ### The fixes shown so far for the miser/sprendthrift problem use the locking approach:
+	   the shared bank account is locked to ensure single-threaded access to the critical-section
+           code that accesses that account.
+
+ # The thread-safe channel approach:
+
+   ## Don't lock the storage, but instead designate a single thread as its de facto controller.
+ 
+      ### In this example, thread N-controller would have sole access to storage N.
+
+      ### The N-thread treats N as if it were its own scratchpad storage: other threads
+	  have to communicate with the N-thread to gain any access to N.
+	  
+	  #### In the miser/spendthrift example, a banker thread would be the N-thread
+
+      ### Messages (perhaps parameterized) are suited to requirement:
+
+                   thread-safe channel               +-----+
+    other threads<--------------------->N-thread---->|  7  | ## N-controller has sole access to N
+		                                     +-----+
+                                                        N
+
+ 

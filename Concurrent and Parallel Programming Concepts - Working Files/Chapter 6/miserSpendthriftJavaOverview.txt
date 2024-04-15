@@ -1,0 +1,39 @@
+                                  code
+			           |
+              +--------------------+--------------------+
+	      |                    |                    |
+	    acct                 acct2                acct3           ## Java package names
+       Account.java         Account.java         Account.java         ## Different implementations (see below)
+       RaceCondition.java   RaceCondition.java   RaceCondition.java   ## application, encapsulates main(...)
+
+  acct implementation:  deliberate race condition, no thread coordination
+  acct2 implementation: explicit, low-level thread coordination with synchronized blocks
+  acct3 implementation: AtomicInteger, which bakes in the thread synchronization
+
+  # All of the source code is included in the ZIP file miserSpendthriftJava.zip.
+    Here are the contexts:
+     
+          code/
+          code/acct/
+          code/acct/Account.java
+          code/acct/RaceCondition.java
+          code/acct2/
+          code/acct2/Account.java
+          code/acct2/RaceCondition.java
+          code/acct3/
+          code/acct3/Account.java
+          code/acct3/RaceCondition.java
+
+  # To compile and run from the 'code' directory at the command-line prompt:
+
+     javac acct/*.java
+     java acct.RaceCondition 50000000
+
+     javac acct2/*.java
+     java acct2.RaceCondition 600000
+
+     javac acct3/*.java
+     java acct3.RaceCondition 7700000
+
+
+   

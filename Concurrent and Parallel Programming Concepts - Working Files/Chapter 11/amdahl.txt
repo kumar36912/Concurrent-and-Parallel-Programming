@@ -1,0 +1,68 @@
+ A quick look at Amdahl's Law
+
+ # The law, named after its creator (a one-time IBM engineer who founded a IBM rival company),
+   sets a theoretical limit on the speedup that can be achieved in a computation.
+   ## The law has the practical benefit of sharpening intuitions about how speedup should be pursued.
+
+ # A sample problem for Amdahl's law: 
+   ## Compute the arithmetic mean of 4M floating-point values on single-processor machine M1.
+      Call this problem P.
+
+   ## Compute the speedup of porting the solution to quad-processor machine M4.
+      ### Assume that M1 and M4 differ only in the number of processors.
+
+ # A step-by-step application of the law:
+
+   1. Compute response time for P on M1: RT1
+   2. Compute response time for P on M4: RT4
+
+   3. Computer the ratio: RT1/RT4
+      ## If RT1/RT4 == 1, the response times are the same: no difference between M1 and M4 performance.
+         E.g., if RT1 == RT4 == 2, the performance is the same.
+
+      ### If RT1/RT4 < 1, there's slowdown rather than speedup.
+          E.g., if RT1 is 4 and RT4 is 8, then 4/8 = 1/2: M4 runs P half as fast as does M1.
+
+      ### If RT1/RT4 > 1, there's speedup.
+          E.g., if RT1 is 8 and RT4 is 4, then 8/4 = 2: M4 runs P twice as fast as does M1.
+
+   4. Normalize RT1 to 1 time unit: keeps things simple.
+
+   5. Break RT4 into two parts: enchanced (in this case, parallel) and unenhanced (in this case, serial)
+      ## The 'unenhanced' part of RT4 is the part still done in serial mode--no benefit of parallelism.
+         ### The data set needs to be partitioned, assigned to workers (threads or processes), the
+	     results from the workers need to be aggregated, etc.
+	     
+      ## The 'enhanced' part of RT4 is the part that benefits from the speedup due to parallelism.
+
+      Speedup = RT1/RT4 = 1/(unenhanced + enhanced)
+
+      ## The 'enhanced' depends on two factors: what fraction of time is sped up, and by what amount.
+         How much time does M4 speed in 'parallel mode' when solving P, and how much faster is M4 in
+	 'parallel mode' than M1 in serial mode?
+         
+      ## Assume M4 is four times faster than M1 when M4 is in 'parallel mode', and that M4 is
+         in 'parallel mode' 80% of the time when solving P.
+
+      ## Speedup = RT1/RT4 = 1/(unenhanced + enhanced) = 1/(0.2 + (0.8/4.0)) = 2.5
+
+      ## Under the given assumptions, M4 solves P 2.5 times faster than does M1.
+
+ # The big picture of Amdahal's Law:
+   ## It's tempting to be distracted by how much faster a 'local speedup' is: M4 is four times faster than
+      M1 when M4 is in 'parallel mode'.
+      
+   ## It's critical to focus on the fraction of time spent in enhanced mode: M4 is in 'parallel mode' 80% of
+      the time--not 100% of time.
+
+Machine	    Fraction in local speedup 	  Local speedup     Global speedup
+-------     -------------------------     -------------     --------------
+  M4                 0.8                       4.0               2.5
+  M8                 0.7                       8.0               2.6        ## improvement over M4
+  M12                0.6                      12.0               2.2        ## starts going down
+  M16                0.5                      16.0               1.9
+  M20                0.4                      20.0               1.6
+  M24                0.3                      24.0               1.4
+
+
+

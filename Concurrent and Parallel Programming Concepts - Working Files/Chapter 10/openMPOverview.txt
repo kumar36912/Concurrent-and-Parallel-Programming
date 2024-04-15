@@ -1,0 +1,40 @@
+ OpenMP for data-level (SIMD) parallelism (http://www.openmp.org/)
+
+ # The SSE examples have focused on 'instruction-set level data parallelism':
+ 
+   ## Special additions to the Intel-compatiable instruction set such as 'paddd' 
+      together with hardware support, in particular the 128-bit %xmm registers.
+      
+      ### The 'paddd' instruction occurs in the simdDoc.s file, which holds assembly code.
+
+          #### The assembly code resulted from 'auto vectorization' on the compiler's part.
+
+      ### The '_mm_mul_ps' library function is part of the 'SSE extensions', and gets called directly in the C code.
+      
+   ## No multiprocessing or multithreading were involved.   
+
+ # Data-level parallelism through multithreading:
+ 
+   ## OpenMP is API specification for thread-based parallel computing with shared memory.
+
+   ## Various C/C++ compilers, in particular GNU, support OpenMP (http://openmp.org/wp/openmp-compilers).
+   
+      ### For high-performance support on Mac OSX, see http://hpc.sourceforge.net/.
+      
+          #### Instructions for installing GNU on a Mac are available at:
+	       https://wiki.helsinki.fi/display/HUGG/Installing+the+GNU+compilers+on+Mac+OS+X
+
+   ## The 'MP' in OpenMP suggests 'multiprocessing', but the OpenMP library supports only thread-based parallelism.
+
+   ## OpenMP is not just parallelism for efficient concurrency; it's for parallel computing in general.
+
+      ### The OpenMP API is high-level and powerful.
+
+   ## Despite similarities in the names, OpenMP and MPI (message passing interface) are quite different.
+   
+      ### We'll look later at MPI.
+
+
+
+
+

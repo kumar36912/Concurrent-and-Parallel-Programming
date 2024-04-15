@@ -1,0 +1,47 @@
+ Wrapup of multithreading
+
+ # Primary upside: switching between threads in the same process is faster than
+   switching between processes (that is, between threads in different processes).
+
+   ## Cost of thread-level context switches is close to negligible.
+
+ # Primary downside: threads within a process share an address space, which means that
+   their concurrent execution can lead to a 'race condition, which results in an unpredictable state
+   for some shared memory location.
+
+   ## The challege of multithreading (multiple threads in the same process) is thus thread coordination.
+
+      ### Too much coordination can lead to inefficiency and even deadlock.
+
+      ### So coordination must be 'just enough': too little may cause race conditions,
+	  too much may cause inefficiences and even deadlock.
+
+      ### There's an efficiency cost to thread coordination, period.
+      
+          #### Can the cost of thread coordination approach, say, the cost of process-level context switching?
+
+ # Basic thread synchronization:
+ 
+   ## Memory-location locking: the locking mechanism should support 'mutual exclusion' where appropriate, but without
+      compromising 'progress' (if no thread holds a lock to a 'critical section', a thread should be able
+      to grab the lock and enter the 'critical section').
+
+      ### Low-level constructs such as the pthread_mutex_t and the Java synchronized block
+	  
+	  ### High-level types (e.g., Java's AtomicInteger and ConcurrentHashMap) with the locking baked in.
+	  
+	      #### Challenge is to make such types efficient as well.
+		  
+   ## Message-passing: 1 thread controls the shared memory, other threads communicate with the controller
+      for access.
+
+ # Other approachs and efficiency improvements
+
+   ## The 'Clojure approach': make most data structures immutable and thereby thread-safe; a few exceptions
+      to the rule (in Clojure, the 'reference' types)
+
+      ### The challenge now becomes efficiency: for example, an immutable list must be copied on every update.
+
+   ## Multiplexing API-level Runnable objects onto a system-managed thread pool (Java ExecutorService, Go goroutine).
+
+

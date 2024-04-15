@@ -1,0 +1,51 @@
+ Overview of MPI and OpenMPI
+
+ # MPI is the Message-Passing Interface, a specification for passing messages among
+   among component processes of a possibly distributed software system.
+
+   ## The OpenMPI emphasis is on parallelism through multiprocessing.
+      ### OpenMPI is quite different than OpenMP, despite the similarity in names!
+   
+   ## In effect, MPI is an IPC mechanism:
+
+     +----------+  MPI messages  +----------+
+     | process1 |<-------------->| process7 |
+     +----------+                +----------+
+      processorA                  processorB   ## processors might be on one machine, or part of cluster
+
+ # MPI supports the SPMD ('Single Program, Multiple Data') model of parallel programming, arguably
+   the most popular style.
+   
+   ## SPMD can be viewed as a subcategory of Flynn's MIMD: one program generates multiple processes,
+      which can divide the work (and corresponding data) among themselves.
+
+   ## SPMD supports HPC ('High Performance Computing') precisely through parallelism.
+
+ # OpenMPI (http://www.open-mpi.org/) and MPICH (http://www.mpich.org/) are two MPI implementations.
+ 
+   ## We'll use OpenMPI, which has bindings for various languages, including C/C++, Fortran, and Java.
+
+      ### OpenMPI runs under Linux, OSX, and Windows.
+
+   ## OpenMPI can use the multiple processors on a given machine together with other processors
+      distributed among the 'nodes' (hosts) in a cluster.
+-------------------------------------------------------------------------------------------------------------
+
+ # Compiling and running MPI programs in C:
+
+   mpicc my1stMPI.c -o my1stMPI  ## 'mpicc' instead of 'gcc' or 'cc'
+   
+   mpirun -np 8 ./my1stMPI       ## -np 8 ('number of processes' desired) is passed to 'mpirun'    
+
+ # Basic pattern in an OpemMPI program:
+
+   1. Initialize OpenMPI.
+   
+   2. Get the number of processes involved ('size'), typically passed in at the command-line.
+   
+   3. Determine the 'rank' (ID) of a given process (0,1,...,size - 1).
+
+   4. For IPC, send and receive messages as needed: great flexibility in how this can be
+      done.
+
+   5. Close down OpenMPI gracefully.

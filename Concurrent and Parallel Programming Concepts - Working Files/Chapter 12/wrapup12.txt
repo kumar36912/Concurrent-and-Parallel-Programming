@@ -1,0 +1,53 @@
+ Summary of key points in distributed systems as the context for parallel computing
+
+ # Big picture
+
+   ## Code examples have focused on map/reduce programming model and and OpenMPI for SPMD systems
+
+   ## Multiple processors accessible at the same time
+     
+   ## A means for the processes to communicate (e.g., message passing as an IPC mechanism)
+
+        mutli-processor machine    
+          +----------------+       
+	  | P1  P2  P3  P4 |   ## each processor with its own cache memory
+	  | P5  P6  P6  P8 |   ## shared main memory  
+	  +----------------+
+
+                         cluster of processor nodes                     ## memory distributed among the nodes
+            +-------+-------+-------+-------+-------+-------+-------+
+            |       |       |       |       |       |       |       |
+          +-+--+  +-+--+  +-+--+  +-+--+  +-+--+  +-+--+  +-+--+  +-+--+
+	  | P1 |  | P2 |  | P3 |  | P4 |  | P5 |  | P6 |  | P7 |  | P8 | ## each has its own memory
+	  +----+  +----+  +----+  +----+  +----+  +----+  +----+  +----+
+ 
+   ## There's little difference, from a programmer's perspective, between a multi-processor single machine
+      and a cluster of networked devices, each with one or more processors.
+      ### Clusters of Raspberry Pi and even more basic devices are relatively easy to build.
+
+   ## The architectural detail--single machine, cluster of device nodes--is an implementation detail.
+   
+   ## We want frameworks and programming models that abstract from implementation detail, and work
+      on either single multi-processor devices or clusters of computing nodes.
+
+ # The map/reduce programming model is suited for dividing work on large data sets among workers,
+   processes or threads.
+
+   ## The work is 'mapped' out to workers, whose partial results later must be 'reduced' or
+      aggregated into a final result: this may be done in stages.
+
+      ### The book index problem illustrates.
+
+ # When work is distributed among distinct physical devices, 'process-based' parallelism makes sense:
+   each process can execute in isolation from the others, and communicate as needed through
+   message-passing.
+   
+   ## The processes, of course, can be multithreaded as needed.
+
+   ## Process-based parallelism is the MPI/OpenMPI approach.
+
+   ## It's convenient to write a 'single program' that, via automatic parallel processing, can work on
+      multiple tasks, in particular multiple data streams: this is the SPMD model at the core of OpenMPI.
+
+   ## Message-passing serves as the straightforward, standardized, and flexible IPC mechanism.
+   

@@ -1,0 +1,47 @@
+   High-level concurrency management for multithreading
+
+  # Belaboring the obvious: multithreading is far trickier to manage than multiprocessing
+    ## The OS keeps the processes in multiprocessing from stepping on one another's storge.
+    ## The programmer must do the same for threads within a process: thread coordination
+
+  # How to support to thread-safety (i.e., safety from race conditions)?
+    ## Consider an in-memory mutable list and an 'add' operation.
+
+           ADD 3  +---+---+
+    thread------->| 1 | 2 |        ## list L before the ADD
+	          +---+---+
+                  +---+---+---+
+                  | 1 | 2 | 3 |    ## list L after the ADD, which changes the original list
+	          +---+---+---+
+
+  # Basic Java approach: Ensure mutual exclusion on shared storage through locking.
+    ## Locking allows only single-threaded access to the list L during an ADD operation.
+
+  # Basic Clojure approach: make in-memory objects immutable by default, with a few exceptions
+    ## The ADD operation first makes a copy of the original list, and then changes the copy.
+
+           ADD 3  +---+---+
+    thread------->| 1 | 2 |        ## list L 
+	          +---+---+
+                      L
+					
+                  +---+---+
+                  | 1 | 2 |        ## copy of list L
+	          +---+---+
+		      Lc
+
+                  +---+---+---+
+                  | 1 | 2 | 3 |    ## copy after the ADD (original is unchanged)
+		  +---+---+---+
+		      Lc
+
+   # The preferred Go approach: have a single thread control access to list L, with other
+     threads sending messages such as ADD to this controlling thread.
+     ## The messages are sent through a thread-safe channel.
+
+                   +---+---+
+		   | 1 | 2 |      ## a single thread T controls access to L
+		   +---+---+
+                     
+              ADD 3                ADD 33
+      thread1------->channel to T<--------thread2  ## the channel has built-in synchronization

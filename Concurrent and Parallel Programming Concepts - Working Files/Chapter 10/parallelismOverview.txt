@@ -1,0 +1,49 @@
+ Parallelism in computing
+
+ # So far the emphasis has been on parallelism as concurrency made efficient: multiple concurrent tasks are
+   distributed among processors so that the tasks can be processed literally at the same time--in parallel.
+   
+   ## In a multiprocessing approach to concurrency, multiple processes execute on multiple processors.
+      ### The OS handles the scheduling.
+   
+   ## In a multithreading approach to concurrency, multiple threads within a process execute on multiple processors.
+      ### If API threads map to 'native' threads, then the OS handles the scheduling. (Assuming no GIL.)
+
+   ## In hybrid approaches (e.g., Asp.Net's multithreaded worker processes), there's still the distribution
+      of task processing among multiple processors.
+----------------------------------------------------------------------------------------------------------------------
+
+ # The goal now is to focus on broader uses of parallel computating.
+
+ # Some reasons why parallelism is now so attractive:
+
+   ## Consumer desktop, laptop, and even handheld machines are now multi-core, with one or more processors per core.
+   
+      ### In fact (even if not in reputation), these machines are 'parallel computers'.
+	  ### At issue is how to exploit this possibily for parallel computations.
+
+   ## Consumer-level machines may come with GPUs (graphics-processing units) and FPUs (floating-point unit or
+      'math coproccessor') as well as CPUs (central or 'generic' processing units).
+      
+       ### GPUs and FPUs are designed for parallelism.
+	 
+       ### 'gpgpu' (general-purpose computing on a GPU) refers to the use of a GPU for 'general purposes', that is,
+           purposes beyond just graphics. So gpgpu approaches a GPU as if it were a (specialized) CPU.
+
+   ## Distributed software systems such as email and the WWW have code modules that execute on physically
+      distinct devices.
+   
+      ### The 'network as the computer' describes networked hosts, each with its own collection of processors,
+          as a resource for distributed parallel computation.
+
+      ### The key challenge is how to coordinate such computations and to share information among them.
+	  #### Message-passing is a popular, general method.
+
+ # Parallel computations may used shared, centralized memory; distributed memory; or some hybrid of the two.
+   
+   ## The point of interest is how to write programs that execute as parallel computations.
+
+   ## Support from toolchains (in particular, compilers therein) is critical to encouarge widespread use
+      of hardware support for parallel computing.
+
+ 

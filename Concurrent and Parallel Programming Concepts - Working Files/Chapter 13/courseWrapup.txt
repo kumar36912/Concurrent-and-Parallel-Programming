@@ -1,0 +1,64 @@
+ Wrapup on concurrency, parallelism, and non-blocking I/O
+
+ # We've seen lots of code--various frameworks, programming models, challenges and opportunities.
+   How to summarize?
+
+ # The 1st big theme: concurrency
+ 
+   ## Many modern apps (e.g., any app with a GUI, any app that delivers a service with requesting clients)
+      must support concurrency.
+      
+      ### The support is typically hybrid:
+      
+          #### The ngnix web server uses multiprocessing and non-blocking I/O.
+
+          #### The IIS web server and Asp.Net together use a mix of multiprocessing and multithreading.
+
+          #### Even a Node.js server supplements its non-blocking I/O API with library-level multithreading.
+
+ # The 2nd big theme: parallelism
+ 
+   ## From the viewpoint of concurrent programming, parallelism as either multiprocessing or multithreading is an
+      efficient way to farm out the concurrent tasks to workers (single-threaded processes, multiple threads
+      within a process, a mix of the two).
+
+   ## Parallelism has uses beyond concurrent: SIMD programming (instruction-level, thread-level,
+      and process-level), SPMD programming (OpenMPI).
+      
+      ### Popular programming models such as map/reduce exploit the power inherent in parallelism.
+
+      ### Modern computing devices are parallel-computing devices with CPUs, GPUs, FPUs, and others
+          that invite parallel computing.
+     
+   ## Distributed systems are thereby parallel-processing systems, with processes on physically distinct devices.
+   
+      ### Processors are processors, whether on a single machine or distributed within a cluster: programming
+          models and frameworks adapt readily to either.
+
+ # The 3rd big theme: non-blocking I/O
+ 
+   ## I/O instructions remain the slowest of the instruction cateories: to block on an I/O operation is thus
+      to wait, which is to waste time better spent on some other task.
+
+   ## Non-blocking I/O can boost performance in general, and now is an established technique in concurrent systems,
+      typically in conjunction with multiprocessing or multithreading.
+
+ # What lies beyond the basics?
+ 
+   ## Support for parallel computing is getting better, and fast: toolsets, frameworks, programming modesl
+
+   ## Some frameworks we didn't have time to cover:
+   
+      ### CUDA (Computer Unified Device Architecture): a framework for 'gpgpu' programming on NVIDIA devices.
+
+      ### OpenCL (Open Computing Language): a C/C++ framework for writing programs across heterogenous platforms
+          with mix of CPUs, GPUs, FPUs, DSPs (Digital Signal Processors), and even
+	  FPGAs (Field Programmable Gate Arrays).
+
+ # What to do next?
+ 
+   ## Make my examples better
+
+   ## Work on sample projects of interest--the more coding, the better.
+
+ 

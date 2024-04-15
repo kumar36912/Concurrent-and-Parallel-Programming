@@ -1,0 +1,42 @@
+ Programming exercise for non-blocking I/O: non-blocking reads from multiple sources
+
+ # Overview
+
+   ## Let's focus again on the 'read' operation in non-blocking I/O, although essentially the same points can be
+      made for the other standard I/O operations.
+
+   ## The appeal of non-blocking 'read' operations is that other work can be done in the time otherwise spent
+      waiting for a 'read' operation to complete: the non-blocking frees up time for other tasks.
+	  
+      ### A non-blocking web server in Node.js can jump from one task to another, e.g., reading one request
+          to reading another, reading a request to writing a response, etc.
+
+ # Review of the 'epoller' program
+
+   ## The epoller program reads from a single named pipe, which the fifoWriter creates and then
+      populates with random integer values.
+
+   ## The fifoWriter sleeps in-between bursts of writes.
+
+ # Amending the 'epoller' program in the following way. (One option is to re-implement in Java or some
+   other language.)
+
+   ## Expand the fifoWriter from producing values for a single file (the named pipe) to producing
+      values for multiple files.
+
+      ### This could be done in various ways, including having multiple threads within the
+	  program, each of which produces values for a specified file.
+
+   ## The 'epoller' remains the single consumer of the values, but now must read from multiple source files.
+
+      ## The 'epoller' should remain single-threaded, relying solely on non-blocking I/O to support
+	 concurrent 'read' operations.
+
+   ## If you want to work on a Java version, then Java's FileOutputStream and FileInputStream types are
+      one way to implement the counterpart of a named pipe.
+
+   
+
+
+
+

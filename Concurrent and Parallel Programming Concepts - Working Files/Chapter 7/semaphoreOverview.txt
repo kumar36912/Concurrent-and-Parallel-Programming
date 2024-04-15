@@ -1,0 +1,43 @@
+ Overview of the semaphore/executor-service example
+
+ # Semaphores versus mutexes:
+ 
+   ## A semaphore allows 'counted access' to a resource, and a mutex is the special case for count == 1
+      ### A semaphore might allow 10 threads to hit a protected resource, but not 11.
+	  
+      ### A mutex would allow 1 thread at most to hit a protected resource.
+	  
+   ## Semphores that allow 'counted access' are called 'counting semaphores'.
+
+ # Executor service: the service builds and then manages a thread pool, drawing upon 'worker threads' in
+   the pool as needed. The difference between
+
+      new Thread(runnable).start();  // explicitly create and start a Thread to handle the task
+
+   and
+
+      exec.execute(runnable);        // get a Thread from a pool to handle the task
+
+   ## Various options for how the Executor can work: use the same thread for a given task, use any thread
+      from a pool for a given task.
+
+ # The SkiRental application to introduce the Executor service and Semaphores
+
+   ## The SkiPair class represents a pair of skis to be rented.
+      ## Properties are 'name' and 'inUse'.
+
+   ## The SkisForRent class represents the inventory of SkiParis available for rent.
+      ## A pair of synchronized methods getSkiPair() and isReturnable(SkiPair) safeguard critical section code.
+	  
+      ## Other methods support the inventory bookkeeping.
+
+      ## To make sure the inventory never runs dry, 'semaphore count' < 'inventory count'
+
+      ### Messages about renting out and returning ski pairs are logged.
+
+ # Each rented SkiPair is simulated as a Runnable, whose duration represents the amount of time
+   spent skiing.
+   ## For robustness, the executor service has a thread pool greater by 1 in size than the inventory.
+
+
+

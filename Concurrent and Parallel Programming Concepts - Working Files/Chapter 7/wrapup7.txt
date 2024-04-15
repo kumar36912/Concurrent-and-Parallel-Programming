@@ -1,0 +1,27 @@
+ Summary of the main themes in the recent code examples
+
+ # producer-consumer pattern using a synchronous queue:
+   ## In effect, a thread-safe channel from one thread to another.
+      ### Two producers with one consumer to illustrate the thread safety.
+      ### The particular queue used in this example acts like a pipe, as there's no buffering.
+
+ # file-searcher: the fork/join framework as a way to 'divide and conqueur' recursive tasks
+   ## Java's fork/join framework allows less busy threads from an executor-service to 'steal'
+      work from busier threads.
+   ## Basic pattern: divide the task into subtasks (etc.), and then aggregate the results.
+
+ # semaphores: a resource needs limited access, but not mutual exclusion
+   ## The ski rental example provides 'tickets' (a counting semaphore) to dictate how
+      many ski pairs from inventory may be rented out at any time
+
+ # Asynchronous multithreading using futures: dispatch a task to a thread, and
+   check later for the result.
+
+ # Immutable types and 'pure functions' are inherently thread-safe:
+   ## There's a cost to immutable types, as mutating operations (write-edit-delete) require
+      that a copy be made--and it's the copy that's changed, not the original.
+
+   ## Pure functions have no side-effects, as they work only with parameters and local
+      variables, both of which are thread safe. Is this realistic in real-world programming?
+      
+   

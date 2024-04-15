@@ -1,0 +1,42 @@
+ Tradeoffs: the upsides and downsides of multiprocessing
+
+ # Upsides
+
+   ## Each process is insulated within its own address space from other processes: the OS in is charge.
+      ### The programmer need not worry about 'race conditions' in which two processes
+	  inappropriately access the same memory location.
+		  
+      ### The OS, not the programmer, keeps processes from stepping on one anothers' memory locations.
+
+   ## On modern systems, process creation is relatively efficient, but not cost-free.
+      ### If multiple processes are needed and can be created at startup, the cost of spawning is amortized
+	  across the app's lifetime.
+	  #### Standard examples are 'pre-forking' web servers.
+		  
+      ### Processes can be put in a 'wait' state when there's no work to be done.
+
+   ## Standard libraries afford a rich assortment of mechanisms for IPC, including:
+      ### signals
+      ### disk files (local and even remote)
+      ### named and unnamed pipes
+      ### local sockets on same host, network sockets across hosts
+      ### message queues
+      ### shared memory
+
+ # Downsides
+
+   ## Process-level context switches ('interprocess' context switches) are relatively expensive.
+      ### The OS needs to do bookkeeping, in particular with the process and page tables.
+      ### Process-scheduling algorithms that try to minimize context switches are in place,
+          and system admins can balance processes against host processors.
+
+   ## The library APIs for putting a process in a quiet state are relatively low-level and tricky.
+
+ # Closing points
+
+   ## Large apps such as web servers and database management systems still rely heavily on multiprocessing.
+   ## There's lots of programming experience with multiprocessing within the community.
+   ## Multiprocessing is a tool well suited for any programmer's toolkit.
+   
+
+   

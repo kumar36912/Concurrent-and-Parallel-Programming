@@ -1,0 +1,41 @@
+ A BlockingQueue example: a thread-safe data structure
+
+ # The interface java.util.concurrent.BlockingQueue has several standard implementations, including
+   java.util.concurrent.SynchronousQueue
+
+   ## This implementation is 'synchronous' in that an 'insert' operation blocks (waits) for a
+      corresponding 'remove' operation.
+
+      ### In different terms, a SynchronousQueue does no buffering and, in this sense,
+	  acts like a pipe. Indeed, the documentation characterizes this queue as an 'empty collection'.
+
+      ### By contrast, an ArrayBlockingQueue does have a buffering capacity.
+
+   ## Here's a depiction, using the familar pipe symbol | to represent the SynchronousQueue, with the
+      producer and consumer as threads:
+
+                          item    item
+          producer thread------>|------>consumer thread
+                        SynchronousQueue
+			  
+   ## The SynchronousQueue is thread-safe.
+
+ # The java.lang.Thread class implements the java.lang.Runnable interface, which defines one method:
+
+          public void run();
+
+   The Thread class has an empty implemenation ('adapter' pattern):
+
+          public void run() { }  // returns immediately
+
+   ## In our example, the Producer and Consumer classes could either subclass Thread or implement Runnable.
+
+      ### For variety, this example takes the 'implement Runnable' approach.
+
+   ## Program structure
+
+      ### The ProducerConsumerQueue class has 'main', which creates a SynchronousQueue named 'dropbox'.
+      ### The Driver likewise creates two Producer threads and a Consumer thread, each with access to the 'dropbox'.
+      ### The Producer threads insert Strings into the queue, and the Consumer thread removes Strings from the
+	  queue one at a time for printing.
+		  

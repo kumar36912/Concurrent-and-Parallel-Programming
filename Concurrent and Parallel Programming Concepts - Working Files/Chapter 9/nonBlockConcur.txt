@@ -1,0 +1,43 @@
+ Non-blocking I/O as a concurrency mechanism
+
+ # Node.js is a general-purpose JavaScript implementation, but tailored for web servers.
+ 
+ # At the API level, a Node.js server is a single-threaded process that uses non-blocking I/O
+   as the concurrency mechanism.
+   
+   ## Under the hood, there's multithreading to handle long-running tasks.
+   ## The cluster.fork() method provides API-level support for multiprocessing.
+
+ # Here's a depiction of the Node.js web server's 'event loop':
+
+             single-threaded: the 'event loop' thread
+                     +-----------------+
+		     |                 | request1
+      request1-----> |  non-blocking   |---------->worker function call 1 ## request 'handler' a called function 
+      request2-----> |  event engine   | request2
+	  ...	     |                 |---------->worker function call 2     
+	             +-----------------+          ...       
+                                                   |
+                                                   |   ## Node.js API level is single-threaded
+		          =========================+=========================
+                                                   |   ## Library implementation level is multithreaded
+					           |
+                                         +---------+---------+ ## libuv is the non-blocking I/O library
+					 | libuv thread-pool | ## a thread pool for long-running jobs
+					 +-------------------+
+
+   ## The single thread that manages the event loop jumps quickly from one task to the next,
+      not waiting ('blocking') on any particular task.
+
+      ### In particular, the event-loop thread does not block on a request read or response write.
+
+ # A long-running job would arise because, for example, the HTTP request is large (e.g., in the
+   MB rather than the KB range), handling the request requires going against a remote DB or other
+   data source, and so on.
+
+ # The 'event loop' approach works best if the requests and responses are relatively small, and the 
+   application logic is short and sweet.
+
+ # As the Node.js example illustrates, non-blocking I/O tends to be used in a supplementary role.
+ 
+   ## The nginx web server uses multiprocessing together with non-blocking I/O.

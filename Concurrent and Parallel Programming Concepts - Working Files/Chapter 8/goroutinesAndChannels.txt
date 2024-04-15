@@ -1,0 +1,43 @@
+ Goroutines and channels
+
+ # Java's executor service illustrates a modern approach to multithreading, an approach with
+   emphasis on efficiency:
+
+   ## Let the runtime system manage a pool of threads, which might grow and shrink dynamically
+      or be fixed in size from the start.
+
+   ## API-level Runnables are multiplexed onto this pool. A given API-level Runnable might execute be
+      assigned, at different times, to different threads from the pool.
+
+   ## The programmer focuses on the application logic for the Runnable, not on the implementation
+      details--yet another separation of concerns. (e.g., semaphore program)
+
+# Go and goroutines (https://golang.org/)
+
+   ## A goroutine is a function that can execute concurrently with others in the same address space:
+
+        go list.Sort()  //*** execute the list.Sort() function concurrently
+	go foo()        //*** execute the user-defined function foo() concurrently
+   
+      ### Each has its own scratchpad storage (stack).
+      
+      ### Goroutines are multiplexed onto native threads: multiple goroutines can share a thread.
+      
+      ### Like Java executors, goroutines hide implementation details to keep the API high-level.
+      
+   ## Channels are thread-safe queues for communication among goroutines.
+    
+      ### Two flavors: buffered ('async' behavior) and unbuffered ('sync' behavior)
+       
+	  #### A writer to an unbuffered channel would block until there's a read,
+	       and a reader would block until there's a write.
+		
+	  #### For buffered channels, the size is specified. For instance, a
+	       buffer of size 4 would allow 4 non-blocking writes.
+
+ # Two examples on a revised miser/spendthrift example:
+ 
+   ## Many goroutines deposit and withdraw from the account.
+   
+   ## The account balanace is allowed to wind up negative or positive instead of stabilizing at zero.
+ 

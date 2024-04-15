@@ -1,0 +1,74 @@
+ Moving beyond explicit thread management: high-level concurrent data types in Java
+
+ # java.util.concurrent.atomic toolkit to support thread-safe, lock-free programming
+   for counters and the like. The types include:
+
+    AtomicInteger
+    AtomicIntegerArray
+    AtomicLong
+    AtomicLongArray
+
+    ## Here's a sketch of how an 'atomic counter' might be implemented:
+
+       public final class Counter { 
+          private long value = 0;  // initialized for emphasis
+          public synchronized long getValue() { return value; }
+          public synchronized long increment() {
+	     if (value == Long.MAX_VALUE)
+	       throw new IllegalStateException("Counter overflow");
+	     return ++value;
+          }
+       }
+
+ # For simplicity, a 'retrieval' operation is a 'read' operation: it has no side-effects.
+   An 'update' operation has side-effects: it changes the data structure.
+   
+ # java.util.concurrent.ConcurrentHashMap
+   ## Same functionality as the ancient Hashtable, but highly efficient
+      ### The map is partitioned: for example, an update locks only part of the map.
+	  Two updates could occur at the same time if in different partitions.
+      ### Retrieval operations generally don't block.
+      ### The whole map cannot be locked in any case.
+
+ # java.util.concurrent.CopyOnWriteArrayList
+   ## Update operations cause a copy of the underlying array to be made.
+      ### In effect, an immutable data structure in the spirt of Clojure.
+
+ # java.util.concurrent.BlockingQueue interface
+   ## A retrieval waits for the queue to become non-empty before retrieving the 1st element.
+   ## Various implementations, e.g., ArrayBlockingQueue and PriorityBlockingQueue
+
+ # Executors and thread pools
+   ## The Executor interface provides a single method, execute, designed to replace the old Thread idiom.
+      For example, if reference 'runnable' points to a Runnable object and 'exec' to an Executor, then
+
+        new Thread(runnable).start();  // create a new Thread to run runnable
+
+      becomes
+
+        exec.execute(runnable);        // may use an already existing worker thread to run runnable
+
+   ## Thread pools
+      ### Most executor implementations use thread pools, which hold 'worker threads'.
+      ### A single worker might be reused to execute many different tasks.
+      ### Eliminates cost of continually creating and destroying Threads.
+
+ # Fork/Join as an Executor service
+   ## The Fork/Join framework implements the ExecutorService interface in a way meant to
+      take full advantage of a multiple-processor machine.
+   ## Designed for work on recursive structures: structures such as trees whose subparts are also,
+      in this case, (sub)trees. Here's a tree representation of the expression (A * B) + (C + D):
+
+                 +            ## root of tree with two subtrees
+		/ \
+	       /   \	
+	      *     +         ## roots of two subtrees
+	     / \   / \ 
+	    A   B C   D       ## 'leaf' nodes: no subtrees below
+			 
+
+    ## The framework distributes tasks to workers from a thread pool, but workers that run out of
+       something to do can 'steal' work from some other thread: highly cooperative task management.
+
+
+   

@@ -1,0 +1,17 @@
+ Exercise for basic multithreading
+
+ # Fix the RaceC program (RaceC.java) by providing explicit locking.
+   ## Use synchronized blocks and a shared lock to ensure that threads t1 and t2
+      do the increment and decrement operations 'atomically' (that is, without interruption).'
+
+   ## Hint: use a static field as the lock to ensure there's a single instance of the lock.
+
+ # To get a sense of what thread syncrhonization costs, time the RaceC program with and
+   without thread synchronization.
+
+   ## The program's execution can be timed in various ways, including the way sketched below:
+
+      final long startTime = System.currentTimeMillis();
+      /*** code to be timed ***/
+      final long stopTime = System.currentTimeMillis();
+      final long latency = stopTime - startTime;

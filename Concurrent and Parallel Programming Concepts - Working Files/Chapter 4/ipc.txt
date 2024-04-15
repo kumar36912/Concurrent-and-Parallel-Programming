@@ -1,0 +1,44 @@
+ Inter-process communication (IPC)
+
+ # Processes execute in splendid isolation from one another because each has its own address space.
+ 
+   ## A process sees itself as alone on the host, in ownership of all the host's resources.
+
+ # What if processes need to cooperate on a task?
+ 
+   ## In a production-grade wer server such as nginx, the 'master' does oversee the workers, creating a
+      new worker, for example, if an existing one goes down; but the workers have essentially no contact
+      with one another.
+
+ # IPC covers the various ways in which processes can shared information if required to do so.
+   Here is a list of some IPC mechanisms:
+
+   ## A 'signal' is a simple command that one process can send to another. Examples are the 'kill' signal
+      to terminate a process, user-defined signals. Processes can send and receive various signals among
+      themselves. Signals represent a very lightweight IPC mechanism.
+
+   ## A 'local file' is accessible to any process that has the file's name. There are library functions to lock such
+      a file, thereby ensuring single-process access at a time. Processes can communicate with one another by writing
+      to and reading from a local file. Other IPC mechanisms deliberately mimic the local file API.
+
+   ## A 'pipe' is a byte-level stream that connects two processes, one of which sends bytes that the other receives:
+      the output of one process is 'piped' into the other process as input. A unnamed pipe (see the earlier
+      pipeExample.c) has no persistence: it exists only during the data exchange. By contrast, a named pipe resembles
+      a local file in that this type of pipe must be deleted explicitly (see the earlier fifoWriter.c); hence,
+      a named pipe can persist even if no processes are currently using it. Named pipes are functionally close to
+      local sockets, considered next.
+
+   ## A 'socket' is a communications endpoint that complies with a protocol (e.g., UDP or TCP); the endpoint
+      supports data exchanges. Network sockets allow a process on one host to communicate with a process on
+      another; local sockets (aka Unix domain sockets) allow process to communicate with a process on the same
+      host. Sockets support the interchange of arbitrary large amounts of information as byte streams.
+
+   ## A 'message queue' supports asynchronous communication in that the sender and the receiver of a message need
+      not coordinate explicitly in order to communicate. For example, one process might send a message to a queue,
+      although no other process is awaiting the message. At some later time, another process could retrieve the
+      message from the queue. Message queues are designed for asynchronous communication among processes.
+
+   ## As the name suggests, 'shared memory' consists of memory locations to which various processes have access.
+      Shared memory thus represents an exception to the memory-isolation rule for processes. A forthcoming example
+      focuses on shared memory.
+   

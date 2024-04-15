@@ -1,0 +1,38 @@
+ A first code example of non-blocking I/O: the 'epoller' program
+
+ # The issue:
+
+    If the I/O operations (e.g., 'read') return immediately, how is a completed 'read' operation to be detected?
+ 
+   ## The application itself can check continually (e.g., in a loop) on the 'read' status.
+   
+      ### For instance, if we know that an integer is 4 bytes in size, we create a 4-byte buffer,
+          read into it continually until we get all 4.
+   
+   ## The application could delegate the checking to a library routine, which then interacts with the
+      application through some notification mechanism:
+      
+      ### The application specifies a user-defined function for the library to call upon
+          successful completion of the 'read' operation.
+
+          #### For reference, the 'callback' approach.
+
+      ### The application delegates the checking to a library in a non-blocking manner, but then waits
+          at some point for notification of at least one pending 'read' operation.
+
+          #### For reference, the 'polling' approach.
+
+ # The 'epoller' example uses the 'polling' approach:
+
+              positive ints  +------------+  anything to read?
+   fifoWriter--------------->| named pipe |<-------------------epoller
+                             +------------+                       |
+                                 FIFO          If the int is a prime, update the count and print the prime.
+
+   ## Two separate processes: the 'fifoWriter' process and the 'epoller' process.
+   
+      ### The 'fifoWriter' writes to a named pipe (FIFO), and the 'epoller' does non-blocking reads
+          on this pipe.
+
+   ## The libuv library (http://nikhilm.github.io/uvbook/introduction.html) used in Node.js gets
+      support, on a Linux system, from epoll.

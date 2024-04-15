@@ -1,0 +1,73 @@
+ What exactly is non-blocking I/O?
+
+ # Big picture: Why the focus on I/O?
+
+   ## Standard categories for instruction types, characterized for speed from fastest to slowest:
+   
+      ### arithmetic/logic (e.g., 'add' and 'equals')
+      ### control (e.g. 'if <test> ... else ...')
+      ### data movement (e.g., 'load-from-memory' and 'store-to-memory')
+      ### I/O (e.g., 'print-to-screen', 'read-from-disk')
+
+   ## Blocking (i.e., waiting) on an I/O instruction is thus time consuming on a computer system.
+
+   ## Related questions:
+
+      ### How best to avoid blocking on I/O operations?
+      ### What to do with time thereby saved?
+
+ # Various terms are used, sometimes interchangably but sometimes not, to describe this type of I/O
+ 
+   ## For example, in some contexts 'non-blocking' and 'asynchronous' are used interchangably, but not always.
+
+   ## A pair of examples should clarify the basic meaning of 'non-blocking' and highlight the issues
+
+   ## The four basic I/O operations: 'open', 'close', 'read', 'write' an I/O device (e.g., a disk drive).
+   
+      ### The 'read' operation is ideal for explaining the 'non-blocking' aspect of the I/O
+  
+ # An example in pseudo-code for blocking I/O:
+
+       byteBuffer[4]  ## array to hold 4 bytes
+       try {
+         read(byteBuffer)          ## attempt to read 4 bytes
+	 processBuffer(byteBuffer) ## do something with the bytes
+       }
+       catch(IOerror e) { print(e) } ## executes if there's an error on the read
+
+   ## The call to read(...) 'blocks' or waits until all of the requested bytes are read or an error occurs.
+   
+ # An example in pseudo-code for non-blocking I/O:
+
+        byteBuffer[4]   ## array to hold 4 bytes
+	index = 0       ## 1st position in byteBuffer
+	expectedCount = byteBuffer.size
+	howManySoFar = 0
+	try { 
+           loop
+	     byteCount = read(byteBuffer, index, expectedCount) ## args: buffer, where to start, how many
+	     if byteCount == 0
+	        continue                                        ## if nothing is read, try again
+	     if byteCount < expectedCount {                     ## we got some but not all
+	        howManySoFar += byteCount
+		if howManySoFar == byteBuffer.size
+		  break                                         ## exit the loop
+                expectedCount = expectedCount - byteCount       ## count the bytes we just got
+	        index = index + byteCount - 1                   ## adjust index
+	        continue                                        ## keep looping
+             }
+        }
+	catch(IOerror e) { print(e) }
+
+    ## In the call to non-blocking read(...), none, some, or all or all of the bytes might be returned.
+    
+       ### The programmer, therefore, must employ some mechanism to determine which case occurred.
+
+  # Blocking I/O is the easier API, non-blocking I/O is the more efficient way to do I/O: the age-old tradeoff
+  
+    ## Upside of non-blocking I/O: the application can move on to other tasks instead of waiting for the
+       I/O operation to complete.
+
+    ## Downside of non-blocking I/O: tricky coding logic
+            
+

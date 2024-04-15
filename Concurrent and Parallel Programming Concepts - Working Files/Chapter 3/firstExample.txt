@@ -1,0 +1,39 @@
+ A first multiprocessing example in C: key points of the 'unnamed pipe example'
+
+ # When the program pipeExample.c is compiled and then executed from the command-line,
+   it executes as a process. Here's the command to execute:
+
+   % ./pipeExample   ## On Windows: % pipeExample
+
+ # The executing pipeExample is the 'parent' process.
+
+ # The parent process calls the library function fork() to spawn a 'child' process,
+   a clone of the parent.
+   ## The library function fork() makes a system call to the OS routine that spawns the child.
+   
+   ## The library function fork() returns one of three values:
+      -1    to signal failure (e.g., the system already has too many processes)
+       0    to the child process
+       > 0  to the parent process; in particular, the 'process id' (pid) of the
+	    child is returned to the parent, and a pid is always a positive integer
+
+   ## The parent and child process both execute the code that follows the call to fork().
+      ### fork() effectively 'clones' one process (child) from another (parent).
+
+      ### An if-else or equivalent construct is used to ensure that the parent does
+	  one thing and the child does something else.
+      
+          pid_t pid = fork();   /** pid_t is a signed integer data type **/
+	  if (-1 == pid) {      /** error: couldn't clone a new process **/
+	     ...                
+	  }   
+          else if (0 == pid) {  /** child code follows **/
+             ...
+	  }
+	  else {                /** parent code follows **/
+	     ...
+	  }
+			
+   ## The parent waits for the child to exit so that the child does not become a 'zombie'.
+      ### When a child terminates, the OS notifies the parent. If the parent is already terminated,
+	  it cannot be notified--and the child becomes an 'zombie', dead but still around.

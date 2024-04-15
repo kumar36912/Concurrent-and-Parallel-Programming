@@ -1,0 +1,32 @@
+ The basics of data parallelism and 'auto vectorization'
+
+ # Examples in the following loose categories:
+
+   ## Use a 'typedef' to describe a vector, but otherwise let the compiler do almost all of the work
+   
+      ### Add, subtract, and divide integer vectors in the 'simd.c' example with 'simdDoc.s'.
+
+   ## Use an API (in this case, 'SSE Extensions') to do some of parallel work ourselves
+      by calling library functions (e.g., '_mm_mul_ps') that, in turn, are compiled into
+      data-parallel instructions.
+      
+      ### Vector add and multiply in the 'sseTimings' example.
+	  
+   ## Use a framework such as OpenMP, with special compiler support for 'auto vectorization'.
+
+      ### Thread-level rather instruction-level data parallelism.
+
+      ### High-level API that relieves the programmer of tedious, challenging tasks such as:
+
+          #### Thread creation and termination.
+               
+          #### Delegation of particular jobs to particular threads.
+
+          #### Waiting for worker threads to terminate.
+
+      ### The 'tempConv' example highlights the easy-to-use 'auto vectorization'.
+
+      ### The 'divideAndConquer' example shows the powerful API for 'scatter-and-gather':
+          tell OMP to scatter a big job into chunks, and let OMP handle the delegation of
+	  chunks to worker threads and the aggregation of the results from each worker.
+

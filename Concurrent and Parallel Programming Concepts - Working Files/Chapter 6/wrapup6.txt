@@ -1,0 +1,29 @@
+ Wrapup of thread synchronization as coordination and coooperation
+
+ # Thread coordination constructs range from explicit mutexs in the source code to thread-safe types
+   such as Java's AtomicInteger.
+   
+   ## Richer thread-safe data structures will be seen later: efficient thread-safe lists and maps.
+      
+      ### Classic Java types such as Vector and Hashtable are thread-safe, but inefficient.
+	  
+ # Thread 'synchronization' includes not just coordination to avoid race conditions and deadlock, but also
+   cooperation to boost performance:
+   
+   ## Having a thread wait is a quiet state is better than having a thread use up resources trying to gain a lock.
+   ## The StackTF example in Java illustrates with waiting and notifying.
+
+ # The multithreading_server highlights multithreading as a concurrency mechanism with these upsides:
+ 
+   ## The 'division of labor' or 'separation of concerns' between a 'listening' thread and 'request handlers'
+      prevents the disaster of having a hung request interfere with others.
+   ## On a multiprocessor host, the 'one-thread-per-request' model can lead to true parallelism.
+   ## The example illustrates the concurrent programming style of real-world web servers such as Tomcat and Jetty.
+   	  
+ # The multithreading_server underscores that local variables (and parameters) are thread-safe: the idea of a
+   'pure function'.
+   
+   ## Modern systems allocate separate stack storage per thread, and it's the stack that holds local variables
+      and params by default.
+  
+

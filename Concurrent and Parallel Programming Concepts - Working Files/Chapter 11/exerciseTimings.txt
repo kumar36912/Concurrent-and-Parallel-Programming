@@ -1,0 +1,24 @@
+ Programming exercise for parallelism/performance
+
+ # More data gathering and reflecting on the data than coding
+
+ # The current version calls Arrays.sort(...) and Arrays.parallelSort(...) on an array.
+   ## Array has roughly 4M array elements.
+   ## Speedup on the machines I tried was about 2.5 for the parallelSort.
+
+ # In the interest of gathering more data, change the program so that it tries various sizes.
+   For instance:
+
+  	final int initialSize = 1024;
+	final int howMany = 16; // don't go over 20 -- overflow occurs
+	int[ ] arraySizes = new int[howMany];
+	arraySizes[0] = initialSize;
+	for (int i = 1; i < howMany; i++) {
+	    arraySizes[i] = arraySizes[i - 1] * 2;
+	}
+
+   Get the speedup for each of the sizes, and note any trends in speedup.
+
+ # Do the same for numeric types other than int, for instance, long, float, and double.
+
+

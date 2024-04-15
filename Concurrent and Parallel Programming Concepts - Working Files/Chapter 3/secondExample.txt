@@ -1,0 +1,32 @@
+ A second multiprocessing example in C: key points of the 'named pipe' example
+
+ # Two separate processes, but no parent/child relationship between them.
+ 
+   ## The processes communicate through a 'named pipe' (aka 'FIFO').
+      ### A named pipe is a mechanism designed to support IPC among processes on the same host.
+
+                 +------------+
+      writer---->| named pipe |<----reader
+                 +------------+
+
+ # The system implements an FIFO as a temporary file.
+ 
+ # Named pipes are quite similar in functionality to Unix Domain Sockets, also called 'local sockets'.
+   ## Network sockets support communcation between processes running on different hosts, whereas
+      named pipes and local sockets do the same for processes running on the same host.
+
+ # The example consists of two executable programs, fifoWriter and fifoReader, which
+   can be executed at the command-line as follows:
+
+   % ./fifoWriter &    ## for Windows: fifoWriter & (& puts the process in the background) 
+   % ./fifoReader      ## for Windows: fifoReader
+
+   ## There are now two processes executing: fifoWriter and fifoReader
+   
+   ## The fifoWriter writes randomly generated integers to the FIFO.
+   
+   ## The fifoReader reads these integers from the FIFO until end-of-file.
+   
+   ## In the C code, the FIFO is 'written' and 'read' as if it were a regular disk file: the I/O API is the same.
+
+

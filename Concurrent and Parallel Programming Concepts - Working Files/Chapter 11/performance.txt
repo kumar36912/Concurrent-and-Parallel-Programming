@@ -1,0 +1,38 @@
+ Parallelism and performance
+
+ # Revised 'sseTimings' program, now in 3 versions: 'timings2048', 'timings8192', and 'timings32768':
+   ## Average speedup of 'serial' version from 20 test runs:
+
+       'timings2048':  average speedup of 2.17    ## 2048 is vector size
+       'timings8192':  average speedup of 1.72    ##  8192 == 2048 x 4
+       'timings32768': average speedup of 1.65    ## 32768 == 8192 x 4
+
+    ## Key question: The 'in_parallel()' function does only 1/4th the arithmetic operations
+       as the 'in_serial()' function. Why is max speedup above only slightly over 2 rather
+       than close to (or even at) 4?
+------------------------------------------------------------------------------------------------------------   
+
+ # How to measure performance?
+   ## Response time ('latency'): elapsed time
+      ### Program P1 takes 10 units, whereas program P2 takes 5: P1/P2 = 2, a speedup of 2
+
+   ## Throughput: number of tasks completed in a fixed amount of time.
+      ### On single-processor machine M1, with required times for processing above the arrows:
+
+                5       3   +-----------+
+            T2----->T1----->| processor |  ## Two tasks completed in 8 time units on M1
+	                    +-----------+
+
+      ### On multiple-processor machine M2:
+
+               5   +-----------+
+           T1----->| processor | ## T1 takes a bit longer on M2
+	           +-----------+
+                                    ## Two tasks completed in 5 time units on M2, a speedup of about 1.6
+               5   +-----------+
+           T2----->| processor | ## T2 takes the same amount of time on M1 and M2
+	           +-----------+
+
+   ## Big picture: parallelism is a good way to boost performance
+      ## Parallelism tends to increase throughput, and thereby performance.
+

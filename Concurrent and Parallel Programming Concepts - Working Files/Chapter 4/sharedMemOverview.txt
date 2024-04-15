@@ -1,0 +1,32 @@
+ Shared memory as an IPC mechanism
+
+ # Depiction:
+                put   +-----------------------+  edit
+       process1------>| shared memory segment |<------process2
+                      +-----------------------+
+		     
+    ## Access is significantly faster than it would be for a shared file.
+
+ # Any number of processes can share a memory segment, whose size is given in bytes.
+
+ ----------------
+
+ API overview
+ 
+ # One process allocates the shared memory segment, specifying the requested size in bytes.
+   ## The process can specify a memory address, but also let the OS make the decision.
+
+ # This process then 'attaches' the allocated memory to its own address space so that
+   standard operations (e.g., read/write) can be performed on the shared memory.
+
+ # Another process references this same memory segment, and likewise 'attaches' the
+   segment to its virtual address space.
+
+ # The shared memory is then accessible to each process.
+
+ # The main library functions are:
+
+   -- shmget (shared memory get), which requests a shared memory segment
+
+   -- shmat (shared memory attached), which attaches a shared memory segment to
+      the virtual address space of a process

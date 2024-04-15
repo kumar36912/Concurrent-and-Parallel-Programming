@@ -1,0 +1,53 @@
+ A polling server: concurrency through non-blocking I/O
+
+ # Like the forking_server (multiprocessing) and the threading_server (multithreading),
+   the polling_server uses the networking code in the file utils.c.
+
+   ## Only the polling_server uses non-blocking sockets: the library function fcntl
+      is used to make the sockets non-blocking, as they are blocking by default.
+   
+   ## The polling_server uses the epoll library.
+      ### The Makefile shown earlier handles the compilation, but epoll library is needed.
+
+ # For relatively small requests (in the low K range), the polling_server is competitive
+   with the forking_server and the threading_server.
+   
+   ### Tools such as the Apache 'ab' tool (http://httpd.apache.org/docs/2.2/programs/ab.html)
+       can be used to measure server performance.
+
+ # Division of labor for the sockets:
+ 
+   ## There's one 'listening' socket through which clients connect.
+   
+   ## Per client, there's a read/write socket through which the client sends the
+      request bytes, and the server sends the response bytes.
+
+ # Basic server structure -- the trickiest so far
+
+      while (true)          ## Run the server indefinitely: kill with Control-C
+         for (...)          ## Iterate through the pending connection and request events
+	   if (...)         ## connection events
+	     while (...)    ## could be indefinitely many connections at the same time
+	   else             ## request events: read request, write response  
+
+   ## Enter a infinite loop to await client connections and client requests: the two are
+      handled separately.
+
+   ## Wait for notification of relevant events (connections and requests) from the epoll library.
+      ### The 'wait' call is the only blocking one in the code.
+
+   ## Determine (in an if-else construct) whether an incomming event is a connection or request:
+      ### The if-clause handles connections.
+      ### The else-clause handles HTTP requests (and generates HTTP responses).
+
+   ## There could be one or more connection events at any time; hence, a 'while' loop is used
+      to handle all of them in the if-clause:
+      ### For each connection, register the request/response-socket with the epoll library.
+
+   ## For each request/response event, read the request and then generate an 'echo' response.
+      ### The implementation makes a critical, simplifying assumption for convenience: all of the
+	  request bytes can be read in a single 'read' operation.
+
+   
+
+   

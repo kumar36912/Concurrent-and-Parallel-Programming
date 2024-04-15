@@ -1,0 +1,46 @@
+ A second way for one executing program to start another
+
+ # Review of the previously way, introduction of the new way:
+ 
+             fork()
+     parent---------->child        ## Both parent and child continue to execute...
+     
+              exec...()
+     process1----------->process2  ## process2 replaces process1, which terminates
+
+ # In systems speak, an 'image' is an executable program. For instance, copying
+   the system from one machine to another is called 're-imaging'.
+   ## In the multiprocessing 'pipeExample' code, the image is the compiled, executable program
+      named 'pipeExample'
+
+ # A new process can be 'spawned' (created) under one of two distinct scenarios, which
+   the difference between the fork() function and the exec-family of functions illustrates.
+   ## The exec-family consists of library functions that, under the hood, make the same
+      system call.
+
+ # In a successful call to fork(), the new child process executes the 'same' image as the
+   parent that spawned it: the forked process is a clone. So the standard code idiom is this:
+
+   pid_t pid = fork();  /* parent executes this */
+   ...                  /* check for success */
+   if (0 == pid) {      /* 0 returned to the child */
+      ...               /* child code */
+   }
+   else {               /* parent code: fork returns child's pid to parent */
+      ...               /* alternative parent test: if (pid > 0)
+   }
+
+ # In a successful call to an exec-function, replaces the current process image with
+   a new image that's loaded into memory.
+
+   int flag = execl("/usr/bin/myGame", "myGame", 0);
+   if (-1 == flag) perror("Couldn't exec...");
+   /* on success, the 'myGame' program now executes */
+
+   ## The new image has its own address space and other features. In summary, the old
+      process stops execution and a new one begins execution.
+
+   ## The new process retains the pid (and ppid) of the one it replaces
+      ## The user and group properties are likewise unchanged.
+	  
+ 

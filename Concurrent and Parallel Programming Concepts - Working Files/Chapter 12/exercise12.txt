@@ -1,0 +1,20 @@
+ An exercise that combines map/reduce and OpenMPI
+
+ # The Index.java example illustrates the logic of map/reduce, but relies
+   on parallel streams (with the underlying multithreading) for the parallelism.
+
+ # The exercise to port the book-index problem to OpenMPI so that:
+
+   ## Each editor has a selected range of pages to cover for a particular word, e.g., 'concurrent'.
+
+   ## The word is the map/reduce 'key', and a list of pages on which the word occurs is the 'value'.
+
+   ## The work is mapped out to OpenMPI worker processes (rank > 0), each of which submits a
+      partial result to the chief editor, the 'master' process whose rank is 0.
+
+   ## The chief editor aggregates the partial results, reducing them to a single, sorted list of
+      page numbers. The final result is thus:
+
+         key   == word (e.g., 'concurrent')
+	 value == sorted list of pages on which the word occurs at least once
+	 

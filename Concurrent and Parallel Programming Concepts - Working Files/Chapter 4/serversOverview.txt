@@ -1,0 +1,37 @@
+ Overview of the multiprocessing and other servers
+
+ # To contrast multiprocessing, multithreading, and non-blocking I/O as ways to support concurrency,
+   there are three sample web servers, each illustrating one of the approaches.
+   
+   ## The servers share some basic networking and setup code. 
+   
+   ## For convenience, all of the code is provided in a ZIP file (ServerCode.zip), with the
+      following contents:
+
+      Readme               ## Explains how to do a batch build of the servers
+      Makefile             ## for the batch build 
+      iterative_server.c   ## no concurrency--for contrast 
+      forking_server.c     ## multiprocessing
+      threading_server.c   ## multithreading
+      polling_server.c     ## non-blocking I/O (requires the epoll library, available on Linux systems)
+      utils.c              ## basic socket code used by the servers: port number set to 3000 for all servers
+      utils.h              ## smaller header file for utils.c
+      web_client.c         ## sample client in C
+
+      ### Short version of setup and running. From the command line:
+
+          -- unzip the files
+		  -- in the working directory, the command is: make  ## builds the four servers
+          -- each server sends back a minimal but syntactically correct HTTP response
+		  -- each server logs a message to the screen, confirming a client connection
+
+ # Quick overview of utils.c:
+
+   ## Performs the traditional '3 step': create-bind-listen
+   
+      ### Creates a listening socket, either blocking (forking_server and threading_server)
+	  or non-blocking (polling_server).
+
+      ### Binds the socket to port 3000, the 'listening port'.
+
+      ### Starts listening for client connections.

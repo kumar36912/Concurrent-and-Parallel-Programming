@@ -1,0 +1,32 @@
+ Overview of the FileSearcher program
+
+ # An example that uses the fork/join framework meant to encourage the partititioning of a
+   problem into subproblems, which threads executing on separate processors handling
+   each subproblem.
+
+   ## The thread management--the multithreading--is under the hood for a very high-level API.
+
+   ## Suited for processing recursive structures such as trees whose parts are likewise
+      trees (that is, subtrees).
+
+   ## The program defines a 'recursive task' (in this case, searching part of the local
+      file sysem), and indicates with calls to 'fork' where a suitable subtask begins.
+
+ # The FileSearcher searches the file system (starting at the root of some tree) for
+   files with a specified extension.
+
+   ## A traditional Unix-like system has / as the root of the whole system, whereas Windows
+      may have multiple roots such as C:\, D:\, E:\, and so on.
+
+   ## The FileSearcher eventually returns a list of the file names with the specified extension.
+
+ # The 'fork' in the fork/join API announces a subproblem suited for a new thread. The 'join'
+   aggregates results from the work of the threads.
+
+ # Base case and recursive case in the FileSearcher
+
+   ## Base case: a search-thread finds a file with the desired extension--a non-directory file rather than
+      a directory--and adds this file to the list.
+
+   ## Recursive case: a search-thread finds a (sub)directory, which is suitable for separate processing.
+

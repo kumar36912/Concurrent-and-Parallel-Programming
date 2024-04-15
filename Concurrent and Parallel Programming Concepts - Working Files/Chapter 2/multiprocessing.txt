@@ -1,0 +1,42 @@
+ A first look at multiprocessing: the command-line pipe operator |
+
+ # At the command line:
+
+   cat file.txt | sort     ## for Windows, "type" instead of "cat"
+
+   ## The 'cat' (short for 'concatenate') on the left is one executing process,
+      and the 'sort' on the right is another executing process.
+	  
+   ## The 'sort' performs blocking I/O: it waits for all of the bytes from 'cat'
+      before doing the sorting.
+
+   ## If the machine has two processorss, 'cat' could execute on one and 'sort' on the other.
+      
+   ## The unnamed pipe operator | thus performs automatic multiprocessing.
+      ### A pipe is thus a mechanism for inter-process communication (IPC).
+
+ # Conceptual view of the pipe:
+
+                       pipe
+               +--------|-------+
+    writer---->|WriteEnd|ReadEnd|<----reader
+               +--------+-------+
+
+ # The tasks at hand (producing the bytes in the file and then sorting the lines)
+   are divided between two proceses, 'cat' and 'sort'.
+
+ # Two general approaches in code:
+
+   ## A parent process 'forks' (clones, spawns) a child process, and both
+      execute code from the same program.	  
+      ### An if-else or the equivalent typically separates the parent code from the child code.
+
+   ## A parent process forks a child, which then executes a separate program.
+
+ # A final example to underscore the point:
+
+   sleep 5 | echo 'Hello, world!'  ## sleep sends no bytes to the pipe, and echo expects none
+
+   ## Hello, world! appears on the screen, and roughly 5 seconds later the prompt returns from the sleep command.
+		  
+		   

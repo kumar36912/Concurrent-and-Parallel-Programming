@@ -1,0 +1,43 @@
+ Programming exercise for thread cooperation through thread-safe channels
+
+ # Big picture
+ 
+   ## Division of labor through multithreading
+   ## Concurrent labor == the threads execute concurrently
+   ## Cooperative labor == the threads are working on a common task
+   ## Thread-safe communication: the concurrent threads share info in a thread-safe way.
+
+ # The exercise in detail
+
+ The java.util.concurrent.BlockingQueue has various thread-safe implementations, and this
+ data type is suited for producer/consumer applications with producers and consumers as
+ threads that communicate over a thread-safe channel:
+ 
+               items  +---------------------+ items
+     producers------->| thread-safe channel |------->consumers
+                      +---------------------+
+
+ Now imagine that multiples producers produce data streams (e.g., data from web searches about
+ the pages on which particular images are displayed), and that a single consumer processes these
+ data streams in some appropriate way (e.g., by ranking the images by the frequenecy of
+ their occurrence on different pages). A single consumer will do because, in general, the task
+ of generating the data stream takes longer than the task of processing the stream.
+
+ To simplify the problem, let's say the producers produce streams of random positive integers,
+ and that the consumer analyzes each stream to find the primes among the integer values; the
+ consumer aggregates the primes from different streams into a list, which periodically is sent
+ to yet another consumer thread from sorting. So the model is:
+
+              positive ints  +---------------------+ positive ints
+     producers-------------->| thread-safe channel |--------------->primes consumer
+                             +---------------------+
+			     
+                     primes  +---------------------+ primes
+     primes consumer-------->| thread-safe channel |-------->sorting consumer
+                             +---------------------+
+
+ For now, the second channel has a single producer (the primes consumer) and a single consumer
+ (the sorting consumer), but in the future there might be multiples of both.
+
+ Implement the application with an implementation of the BlockingQueue that seems suited to the task.
+ 

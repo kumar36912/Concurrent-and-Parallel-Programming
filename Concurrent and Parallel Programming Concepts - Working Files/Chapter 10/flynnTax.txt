@@ -1,0 +1,66 @@
+ Flynn's taxonomy of parallel architectures
+
+ # Cautionary notes:
+   ## Flynn's taxonomy is neutral about whether the architecture is for single or distributed systems:
+      ### For instance, an SIMD architecture might be realized on either a single computer system or a network of these.
+
+   ## The taxonomy has been modified and expanded in various ways, but provides a good starting point.
+
+   ## SIMD is especially relevant nowadays.
+
+ # Abbreviations:
+
+   D = Data
+   I = Instructions
+   P = Processor
+
+   'S' is  for 'single', and 'M' is for 'multiple'.
+
+   ## Parallelism in any form requires multiple processors, the Ps in the following depictions.
+
+ # SISD: single instruction, single data
+   ## Represents the base case: neither data nor instruction parallelism.
+
+   +----------+    +---+    +----------+
+   | D source |--->| P |<---| I source |                  ## none
+   +----------+    +---+    +----------+
+   
+ # SIMD: single instruction, multiple data
+   ## Various languages now have support.
+   ## Lots of interest in modern computing.
+
+   +----------+    +---+
+   | D source |--->| P |<---+
+   +----------+    +---+    |
+   +----------+    +---+    |  +----------+
+   | D source |--->| P |<---+--| I source |               ## data
+   +----------+    +---+    |  +----------+
+   +----------+    +---+    |
+   | D source |--->| P |<---+
+   +----------+    +---+
+   
+ # MISD: multiple instruction, single data
+   ## Fault-tolerant system?
+
+                      +---+    +----------+
+                 +--->| P |<---| I source |
+                 |    +---+    +----------+
+   +----------+  |    +---+    +----------+
+   | D source |--+--->| P |<---| I source |               ## instruction
+   +----------+  |    +---+    +----------+ 
+                 |    +---+    +----------+
+                 +--->| P |<---| I source | 
+                      +---+    +----------+
+					
+ # MIMD: multiple instruction, multiple data
+   ## Distributed systems?
+
+   +----------+    +---+    +----------+
+   | D source |--->| P |<---| I source |
+   +----------+    +---+    +----------+
+   +----------+    +---+    +----------+
+   | D source |--->| P |<---| I source |                  ## both
+   +----------+    +---+    +----------+
+   +----------+    +---+    +----------+
+   | D source |--->| P |<---| I source |
+   +----------+    +---+    +----------+

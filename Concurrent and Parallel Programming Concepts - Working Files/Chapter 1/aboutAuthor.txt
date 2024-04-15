@@ -1,0 +1,24 @@
+
+ The short story:
+
+ Marty Kalin
+ Chicago, IL
+ kalin@cs.depaul.edu
+ http://condor.depaul.edu/mkalin
+ 
+ Faculty member in computer science for over 30 years at DePaul University
+   # College of Computing and Digital Media at DePaul
+   # PhD from Northwestern University
+   # Written and co-written books about C, C++, and Java
+
+ Real-world programming, as a consultant, concurrent and distributed systems, especially
+ in the areas of process planning and scheduling (steel industry), and in product
+ configuration (truck/bus manufacturing).
+
+ Like you, I always want to see the code. :)
+
+
+
+
+ 
+ 

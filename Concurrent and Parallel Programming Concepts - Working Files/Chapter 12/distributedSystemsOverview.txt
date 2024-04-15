@@ -1,0 +1,53 @@
+ Parallelism and distributed systems
+
+ # Transition from SIMD parallelism (instruction-based and thread-based) to parallelism in
+   distributed systems.
+   
+   ## Parallelism in distributed systems is not so easy to categorize (MIMD?).
+
+ # A 'distributed system' is a software system whose modules execute on physically distinct devices.
+
+   ## The web itself is a distributed system.
+
+   ## Social networking sites (Facebook, Twitter, Tumblr, etc.) are distributed systems.
+
+   ## Indeed, you can make the case that nowadays distributed systems are more the rule than the exception.
+
+ # Distributed systems are challenging for various reasons, including:
+
+   ## Their reliability and robustness depend, in the end, on networking infrastructure.
+
+   ## The hosts (devices) involved are likely heterogenous--different hardware, different OSes, etc.
+
+   ## Communication among the modules requires sound practices, and is subject to failure for various reasons.
+----------------------------------------------------------------------------------------------------------------------
+
+ # The simplest distributed system has two computing devices, which call 'hosts' following common practice.
+
+   ## Assume just two hosts, which together run distributed system DS1.
+
+   ## If both hosts are running DS1 modules (M1 on Host1, M2 on host2) at the same time,
+      there's parallelism--now in distributed form.
+
+   ## The obvious question: how do M1 and M2 cooperate in processing a shared task?
+
+      ### Message passing in various forms has become the norm:
+
+        ## DS module being executed:      M1                   M2
+                                       +-------+  messages  +-------+
+        ## Device:                     | Host1 |<---------->| Host2 |
+                                       +-------+            +-------+
+
+ # Message-passing software
+  
+   ## MPI (Message Passing Interface: http://www.mpi-forum.org/) is a set of industrial-strength standards
+      for message-passing.
+
+      ### OpenMPI (http://www.open-mpi.org/) is an open-source implementation of MPI.
+
+          #### Easy to confuse OpenMPI with OpenMP!
+
+   ## There are OpenMPI bindings for various programming languages, including Java
+      (http://www.open-mpi.org/faq/?category=java), although C/C++ remain the standard languages.
+
+   ## MPI and OpenMPI are infrastructure for HPC (High Performance Computing) in its distributed form.
